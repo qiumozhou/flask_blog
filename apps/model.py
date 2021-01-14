@@ -1,10 +1,11 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
+
+
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
+
 from sqlalchemy.orm import relationship
 
-
-engine = create_engine('mysql+pymysql://root:123456@127.0.0.1:3306/blog?charset=utf8')
+from apps.db import engine
 
 Base = declarative_base()
 
@@ -30,6 +31,7 @@ class Article(Base):
     __tablename__ = "tb_article"
     id = Column(Integer,primary_key = True)
     titile = Column(String(255),nullable=False,index=True)
+    pubdate = Column(DateTime,nullable=False)
     content = Column(Text)
     user_id = Column(Integer,ForeignKey("tb_user.id"))
     tags = relationship('Tag', backref='articles', secondary=article_tag)

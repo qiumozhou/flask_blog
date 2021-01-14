@@ -1,13 +1,12 @@
 from faker import Factory
 from faker.generator import random
-from sqlalchemy import create_engine
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from apps.db import engine
 from apps.model import User, Tag, Article
 
-
-engine = create_engine('mysql+pymysql://root:123456@127.0.0.1:3306/blog?charset=utf8')
 
 Base = declarative_base()
 
@@ -30,8 +29,9 @@ session.add_all(faker_tags)
 for i in range(100):
         article = Article(
             titile=faker.sentence(),
-            content=' '.join(faker.sentences(nb=random.randint(10, 20))),
-            author=random.choice(faker_users)
+            content=' '.join(faker.sentences(nb=random.randint(70, 100))),
+            author=random.choice(faker_users),
+            pubdate = faker.date_time()
         )
         for tag in random.sample(faker_tags, random.randint(2, 5)):
             article.tags.append(tag)
