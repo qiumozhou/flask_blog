@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/jquery-3.5.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+
 </head>
 <body>
   <div class="cont">
   {% block header %}
+
     <nav class="navbar navbar-inverse">
     
         <div class="container-fluid">
@@ -20,11 +21,9 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
            
             <ul class="nav navbar-nav">
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
+                {%  for item in articleType %}
+              <li><a href="/side/{{ item }}-1">{{ articleType[item] }}</a></li>
+                {% endfor %}}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -35,9 +34,9 @@
 
             <form class="navbar-form navbar-right">
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" class="form-control" placeholder="Search" id = "search">
               </div>
-              <button type="submit" class="btn btn-default">Submit</button>
+              <button  class="btn btn-default" onclick="doSearch()">Search</button>
             </form>
             
           </div><!-- /.navbar-collapse -->
@@ -79,6 +78,8 @@
       </div><!-- /.modal -->
   </div>
 
+
+
   {%  endblock %}
 
   {% block main %}
@@ -93,8 +94,10 @@
     </div>
 </footer>
 
-  
+
   {% endblock %}
 </div>
+
+
 </body>
 </html>

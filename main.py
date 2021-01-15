@@ -1,9 +1,11 @@
 from flask import Flask, render_template
-# from flask.ext.sqlalchemy import SQLAlchemy
-# from apps import article
+
 from apps.article import article
-from apps.db import dbsession
+from apps.filters import filters
 from apps.model import Article
+from apps.page import page
+from apps.search import search
+from apps.side import side
 
 app = Flask(__name__,static_folder="static",template_folder="template",static_url_path='/')
 
@@ -13,16 +15,34 @@ app = Flask(__name__,static_folder="static",template_folder="template",static_ur
 # #实例化
 # db = SQLAlchemy(app)
 
+
+@app.context_processor
+def getType():
+    type = {
+        1:"math",
+        2: "chinese",
+        3: "english",
+        4: "life",
+        5: "sports",
+        6: "earth",
+    }
+    return dict(articleType=type)
+
+
 @app.route('/')
 def index():
-    row = dbsession.query(Article)[0:5]
-    return render_template("index.html", artiles=row)
+    article = Article()
+    articleList = article.getPageArticle(0,10)
+    pageNumber = article.getPageNumber()
+    return render_template("index.html", articles=articleList,pageNumber=pageNumber)
 
-# @app.route('/article')
-# def article():
-#     return render_template("article.html")
+
 
 if __name__ == "__main__":
 
     app.register_blueprint(article)
+    app.register_blueprint(filters)
+    app.register_blueprint(page)
+    app.register_blueprint(side)
+    app.register_blueprint(search)
     app.run(debug=True)

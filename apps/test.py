@@ -31,7 +31,10 @@ for i in range(100):
             titile=faker.sentence(),
             content=' '.join(faker.sentences(nb=random.randint(70, 100))),
             author=random.choice(faker_users),
-            pubdate = faker.date_time()
+            pubdate = faker.date_time(),
+            type = faker.random_int(min=1,max=6),
+            reading_volume = faker.random_int(min=100,max=900),
+            cost_integral = faker.random_int(min=1,max=10)
         )
         for tag in random.sample(faker_tags, random.randint(2, 5)):
             article.tags.append(tag)

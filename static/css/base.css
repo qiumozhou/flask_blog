@@ -5,16 +5,16 @@ html,body {
 }
 
 .cont{
-  min-height:110%;
-  height: auto !important;
-  height: 110%;
+  min-height:100%;
+  /*height: auto !important;*/
+  height: 100%;
   position: relative;
 
 }
 footer {
   background-color: black;
   color: white;
-  position: absolute;
+  position: relative;
   line-height: 50px;
   bottom: 0;
   width: 100%;
