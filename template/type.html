@@ -46,21 +46,21 @@
                         <ul class="pagination navbar-right">
                           <li>
                               {% if currentPage != 1 %}
-                            <a href="/search/{{ keyword }}-{{ currentPage-1 }}" aria-label="Previous">
+                            <a href="/type/{{ type }}-{{ currentPage-1 }}" aria-label="Previous">
                                 {%  else %}
-                             <a href="/search/{{ keyword }}-1" aria-label="Previous">
+                             <a href="/type/{{ type }}-1" aria-label="Previous">
                                  {% endif %}
                               <span aria-hidden="true">&laquo;</span>
                             </a>
                           </li>
                             {% for number in range(1,pageNumber+1) %}
-                          <li><a href="/search/{{ keyword }}-{{ number }}">{{ number }}</a></li>
+                          <li><a href="/type/{{ type }}-{{ number }}">{{ number }}</a></li>
                           {% endfor %}
                           <li>
                               {%  if currentPage != pageNumber %}
-                            <a href="/search/{{ keyword }}-{{ currentPage+1 }}" aria-label="Next">
+                            <a href="/type/{{ type }}-{{ currentPage+1 }}" aria-label="Next">
                                 {% else %}
-                                <a href="/search/{{ keyword }}-{{ pageNumber }}" aria-label="Next">
+                                <a href="/type/{{ type }}-{{ pageNumber }}" aria-label="Next">
                                     {% endif %}
                               <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -77,7 +77,7 @@
 
       </div>
       <!-- 热点  -->
-{{ super() }}
+   {{ super() }}
 
 
   </div>

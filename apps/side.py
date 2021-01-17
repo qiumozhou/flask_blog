@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, jsonify
 
 
 from apps.model import Article
@@ -6,15 +6,10 @@ from apps.model import Article
 
 side = Blueprint("side",__name__)
 
-
-@side.route("/side/<int:type>-<int:page>",methods=["GET"])
-def getSide(type,page):
+@side.route("/side")
+def getSide():
     article = Article()
-    articleData = article.getSideArticle(type,page)
-    pageNumber = article.getTypeNumber(type)
-    currentPageNumber = page
-    return render_template("side.html",articles=articleData,pageNumber=pageNumber,currentPage=currentPageNumber,type=type)
-
-
-
-
+    readMent =article.getReadList()
+    newPub = article.getNewList()
+    popRead = article.getPopList()
+    return jsonify(readMent,newPub,popRead)

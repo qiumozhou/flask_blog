@@ -1,5 +1,5 @@
 import math
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import relationship
@@ -43,7 +43,7 @@ class Article(Base):
         return row
 
     def getPageNumber(self):
-        articleTotal = len(dbsession.query(Article).all())
+        articleTotal = dbsession.query(Article).count()
         number = math.ceil(articleTotal / 10)
         return number
 
@@ -66,6 +66,19 @@ class Article(Base):
     def getSearchNumber(self, keyword):
         number = math.ceil(dbsession.query(Article).filter(Article.titile.like('%'+keyword+'%')).count()/10)
         return number
+
+    def getReadList(self):
+        row = dbsession.query(Article.id,Article.titile).order_by(Article.reading_volume.desc()).limit(10).all()
+        return row
+
+    def getNewList(self):
+        row = dbsession.query(Article.id, Article.titile).order_by(Article.pubdate.desc()).limit(10).all()
+        return row
+
+    def getPopList(self):
+        row = dbsession.query(Article.id, Article.titile).order_by(func.rand()).limit(9).all()
+        return row
+
 
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.titile)

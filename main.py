@@ -6,6 +6,7 @@ from apps.model import Article
 from apps.page import page
 from apps.search import search
 from apps.side import side
+from apps.type import type
 
 app = Flask(__name__,static_folder="static",template_folder="template",static_url_path='/')
 
@@ -43,6 +44,8 @@ if __name__ == "__main__":
     app.register_blueprint(article)
     app.register_blueprint(filters)
     app.register_blueprint(page)
-    app.register_blueprint(side)
+    app.register_blueprint(type)
     app.register_blueprint(search)
+    app.register_blueprint(side)
+
     app.run(debug=True)

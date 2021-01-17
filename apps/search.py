@@ -6,7 +6,7 @@ from apps.model import Article
 
 search = Blueprint("search",__name__)
 
-@search.route("/search/<string:keyword>-<int:page>",methods=["GET"])
+@search.route("/search/<keyword>-<int:page>",methods=["GET"])
 def getSearch(keyword,page):
     article = Article()
     articleData = article.getSearchArticle(keyword,page)
