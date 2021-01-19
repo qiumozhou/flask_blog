@@ -5,8 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from apps.db import engine
-from apps.model import User, Tag, Article
-
+from apps.model import User, Tag, Article, Credit
 
 Base = declarative_base()
 
@@ -39,4 +38,17 @@ for i in range(100):
         for tag in random.sample(faker_tags, random.randint(2, 5)):
             article.tags.append(tag)
         session.add(article)
+
+
+credit_category =[[1,"用户登录"],[50,"用户注册"],[2,"评论文章"],[-5,"阅读文章"],[200,"用户投稿"]]
+faker_credit = [Credit(
+    category=credit_category[random.randint(0,4)][1],
+    credit=credit_category[random.randint(0,4)][0],
+    user=random.choice(faker_users),
+    createtime=faker.date_time(),
+    updatetime=faker.date_time()
+
+) for i in range(10)]
+session.add_all(faker_users)
+
 session.commit()

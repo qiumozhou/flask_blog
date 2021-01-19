@@ -1,21 +1,22 @@
+import datetime
+import os
+
 from flask import Flask, render_template
 
 from apps.article import article
+from apps.login import login
 from apps.filters import filters
 from apps.model import Article
 from apps.page import page
+from apps.register import register
 from apps.search import search
 from apps.side import side
 from apps.type import type
 
 app = Flask(__name__,static_folder="static",template_folder="template",static_url_path='/')
 
-# app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://jianshu:jianshu@127.0.0.1:3306/jianshu'
-# #设置这一项是每次请求结束后都会自动提交数据库中的变动
-# app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']=True
-# #实例化
-# db = SQLAlchemy(app)
-
+app.config["SECRET_KEY"] = os.urandom(24)
+app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(minutes=5)
 
 @app.context_processor
 def getType():
@@ -47,5 +48,6 @@ if __name__ == "__main__":
     app.register_blueprint(type)
     app.register_blueprint(search)
     app.register_blueprint(side)
-
+    app.register_blueprint(register)
+    app.register_blueprint(login)
     app.run(debug=True)
