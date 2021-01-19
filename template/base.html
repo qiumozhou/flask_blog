@@ -40,7 +40,7 @@
                      {% if session.get("username") %}
                       <ul  class="nav navbar-nav navbar-right"  id = "tag2">
                         <li><a href="#" id="name">欢迎您！{{ session.get("username") }}</a></li>
-                        <li><a href="/logout">logout</a></li>
+                        <li><a  onclick="doLogout()">logout</a></li>
                     </ul>
                     {% endif %}
 
@@ -356,7 +356,19 @@
                         alert("error")
                 }
             })
-        }
+        };
+
+        function doLogout(){
+                $.ajax({
+                type:"GET",
+                url:"/logout",
+                success:function (result){
+                    if (result=="ok"){
+                        location.href='/'
+                    }
+                }
+                })
+        };
 
 
 

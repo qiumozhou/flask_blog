@@ -1,7 +1,7 @@
 import datetime
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session
 
 from apps.article import article
 from apps.login import login
@@ -29,6 +29,14 @@ def getType():
         6: "earth",
     }
     return dict(articleType=type)
+
+
+
+@app.before_request
+def before_request():
+    username = request.cookies.get("username")
+    if username:
+        session['username'] = username
 
 
 @app.route('/')

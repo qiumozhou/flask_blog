@@ -1,4 +1,4 @@
-from flask import Blueprint, session, request, jsonify, redirect, url_for
+from flask import Blueprint, session, request, jsonify, redirect, url_for, make_response
 
 from apps.model import  User
 from common.code import  Checkcode
@@ -39,11 +39,16 @@ def login_in():
             return jsonify(result)
         else:
             session['username'] = user.username
-            result = {'code': "10001", 'msg': "success","data":user.username}
-            return jsonify(result)
+            result = {'code': "10001", 'msg': "success", "data": user.username}
+            resp = make_response(jsonify(result))  # 设置响应体
+            resp.set_cookie("username", user.username, max_age=3600)
+            return resp
 
 
 @login.route('/logout',methods=["get"])
 def logout():
+    resp = make_response("ok")
+    # 删除cookie
+    resp.delete_cookie("username")
     session.pop("username")
-    return redirect(url_for('index'),code=302)
+    return resp
