@@ -32,16 +32,17 @@ def login_in():
         if ver_code.lower()!= session.get("verifyCode").lower():
             result = {'code': "10004", 'msg': "code is error!"}
             return jsonify(result)
-
         user = User().getUserByAll(username,password)
         if not user:
             result = {'code': "10004", 'msg': "username or password is error!"}
             return jsonify(result)
         else:
             session['username'] = user.username
+            # session['userid'] = user.id
             result = {'code': "10001", 'msg': "success", "data": user.username}
             resp = make_response(jsonify(result))  # 设置响应体
             resp.set_cookie("username", user.username, max_age=3600)
+            # resp.set_cookie("userid", user.id, max_age=3600)
             return resp
 
 
@@ -50,5 +51,6 @@ def logout():
     resp = make_response("ok")
     # 删除cookie
     resp.delete_cookie("username")
+    resp.delete_cookie("userid")
     session.pop("username")
     return resp

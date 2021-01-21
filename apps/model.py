@@ -64,7 +64,8 @@ class Article(Base):
 
 
     def getOneArticle(self,id):
-        row = dbsession.query(Article).filter(Article.id==id).first()
+        row = dbsession.query(Article.type,Article.titile
+        ,Article.pubdate,Article.reading_volume,Article.cost_integral,User.username).outerjoin(User,User.id == Article.user_id).filter(Article.id==id).first()
         return row
 
     def getPageNumber(self):
@@ -104,9 +105,38 @@ class Article(Base):
         row = dbsession.query(Article.id, Article.titile).order_by(func.rand()).limit(9).all()
         return row
 
+    def isBuy(self,articleId):
+        data = dbsession.query(Credit.id).filter(Credit.target==articleId,Credit.category=='购买文章').first()
+        if data:
+            return True
+        else:
+            return False
 
-    def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, self.titile)
+    def getHalfContent(self,articleId):
+        row = dbsession.query(Article.content).filter(Article.id == articleId).first()
+        data = row[0][:len(row[0])//2]
+        return data+"..."
+
+    def getAllContent(self, articleId):
+        row = dbsession.query(Article.content).filter(Article.id == articleId).first()
+        return row[0]
+
+    def buyArticle(self,username,articleid):
+        user = dbsession.query(User).filter(User.username==username).first()
+        article =  dbsession.query(Article).filter(Article.id==articleid).first()
+        if user.credit < article.cost_integral:
+            return {"code":10004,"msg":"not enough credit！"}
+        else:
+            now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            user.credit -= article.cost_integral
+            credits = Credit(category="购买文章",target=articleid,credit=-article.cost_integral,
+                             createtime=now,updatetime=now,user_id= user.id)
+            dbsession.add(credits)
+            dbsession.commit()
+            return {"code":10001,"msg":"ok"}
+
+    # def __repr__(self):
+    #     return '%s(%r)' % (self.__class__.__name__, self.titile)
 
 
 
@@ -140,5 +170,20 @@ class Credit(Base):
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.category)
 
+class Comment(Base):
+    __tablename__ = "tb_comment"
+    id = Column(Integer,primary_key=True)
+    user_id = Column(Integer,ForeignKey("tb_user.id"))
+    article_id = Column(Integer,ForeignKey("tb_article.id"))
+    user = relationship("User",backref="comments")
+    article = relationship("Article", backref="comments")
+    reply_id = Column(Integer,default=0)
+    content = Column(Text)
+    is_hidden  = Column(Integer)
+    createtime = Column(DateTime)
+    updatetime = Column(DateTime)
 
-Base.metadata.create_all(engine)
+    def getComment(self,articleid):
+        pass
+
+# Base.metadata.create_all(engine)

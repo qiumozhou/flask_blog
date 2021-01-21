@@ -1,40 +1,74 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 {% block main %}
 <div class="content">
     <div class="container">
         <div class="row">
             <div class="col-md-9">
                 <div class="jumbotron">
-  <h2>{{ article.titile}}</h2>
-  <p>{{ article.content }}</p>
-</div>
+                    <h2>{{ article.titile}}</h2>
 
+                    <div class="info">作者：{{ article.username }}&nbsp;&nbsp;&nbsp;分类：{{ articleType[article.type] }}&nbsp;&nbsp;&nbsp;
+                日期：{{ article.pubdate  }}&nbsp;&nbsp;&nbsp;阅读：{{ article.reading_volume }}次&nbsp;&nbsp;&nbsp;消耗积分：{{ article.cost_integral }} 分</div>
+
+                    <p id="content">
+
+                    </p>
+                    <div style="text-align:center" id="readAll">
+                    <button class="btn  btn-info" onclick="doBuyArticle()">read all</button>
+                   </div>
+                </div>
+
+                    <div class="panel panel-primary"  style="background-color: #2aabd2">
+                      <div class="panel-body">
+                        your name:{{ session.get("username") }}
+                      </div>
+                      <div class="panel-footer">Your comment
+
+                                  <input type="text" class="form-control" aria-label="...">
+                                  <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary navbar-btn pull-right">submit</button>
+                                </div>
+                      </div>
+                    </div>
             </div>
-
-
-               <div class="col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-heading">Panel heading without title</div>
-          <div class="panel-body">
-            Panel content
-          </div>
-        </div>
-
-                        <div class="panel panel-default">
-          <div class="panel-heading">Panel heading without title</div>
-          <div class="panel-body">
-            Panel content
-          </div>
-        </div>
-
+              {{ super() }}
       </div>
 
-
-
-
-
-
-        </div>
     </div>
+
 </div>
+
+<script>
+     url= location.href;
+     index = url.lastIndexOf('/')+1;
+     articleId = url.substring(index);
+    $(function (){
+        $.get("/content/"+articleId,function (data){
+            if(data.flag == true){
+                $("#readAll").hide();
+               $("#content").append(data.data);
+            }else{
+                 $("#content").append(data.data);
+            }
+
+        })
+    });
+
+    function doBuyArticle(){
+        $.get("/articlebuy/"+articleId,function (data){
+            if(data.code == 10004){
+                alert(data.msg)
+            }else if(data.code == 10001){
+                $("#readAll").hide();
+                $.get("/content/"+articleId,function (data){
+                    if(data.flag == true){
+                         $("#readAll").hide();
+                         $("#content").html(data.data);
+                    }
+                    }
+                )
+            }
+        })
+    }
+</script>
 {% endblock %}

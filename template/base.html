@@ -45,12 +45,15 @@
                     {% endif %}
 
 
-                    <form class="navbar-form navbar-right">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search" id="search">
-                        </div>
-                        <button class="btn btn-default" onclick="doSearch()">Search</button>
-                    </form>
+                 <<div class="col-lg-2" >
+                <div class="input-group navbar-btn ">
+                  <input type="text" class="form-control" placeholder="Search for..." id="search">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="doSearch()">Go!</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+
 
 
                 </div>
@@ -180,10 +183,10 @@
 
 
 
-        {% endblock %} {% block main %}
-
+        {% endblock %}
+        {% block main %}
         <!-- 热点  -->
-
+        <div class="row">
         <div class="col-sm-3">
             <div class="panel panel-default">
                 <div class="panel-heading">Top 10 reading</div>
@@ -196,6 +199,8 @@
                     </div>
                 </div>
             </div>
+
+
        
 
         <div class="col-sm-3">
@@ -209,8 +214,8 @@
                         </ul>
                     </div>
                 </div>
-            </div>    
-       
+            </div>
+
         <div class="col-sm-3">
             <div class="panel panel-default">
                 <div class="panel-heading">Top 10 Popular recommendation</div>
@@ -223,7 +228,7 @@
                     </div>
                 </div>
             </div>
-       
+       </div>
         {% endblock %} 
 
 
@@ -347,9 +352,10 @@
                 },
                 success: function (result){
                     if(result.code == '10001'){
-
                     $('#login').modal('hide');
                     location.href = "/";
+                    }else if(result.code == '10004'){
+                        alert(result.msg);
                     }
                 },
                 error:function (){

@@ -35,8 +35,10 @@ def getType():
 @app.before_request
 def before_request():
     username = request.cookies.get("username")
+    # userid = request.cookies.get("userid")
     if username:
         session['username'] = username
+        # session['userid'] = userid
 
 
 @app.route('/')
