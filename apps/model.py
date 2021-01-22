@@ -183,7 +183,41 @@ class Comment(Base):
     createtime = Column(DateTime)
     updatetime = Column(DateTime)
 
-    def getComment(self,articleid):
-        pass
+    # def getComment(self,articleid):
+    #     pass
 
-# Base.metadata.create_all(engine)
+
+
+class Favorite(Base):
+    __tablename__ = "tb_favorite"
+    id = Column(Integer,primary_key=True)
+    user_id = Column(Integer,ForeignKey("tb_user.id"))
+    article_id = Column(Integer,ForeignKey("tb_article.id"))
+    is_collect = Column(Integer)
+    create = Column(DateTime)
+
+    #获取一个收藏
+    def getCollect(self,articleid,userid):
+        fa = dbsession.query(Favorite).filter(Favorite.article_id==articleid,Favorite.user_id==userid).first()
+        return fa
+
+    #新建一个收藏
+    def addCollect(self,userid,articleid):
+        now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        fa = Favorite(user_id=userid,article_id=articleid,is_collect=1,create=now)
+        dbsession.add(fa)
+        dbsession.commit()
+        return fa
+
+    #修改收藏状态
+    def resetCollect(self,id):
+        fa = dbsession.query(Favorite).filter(Favorite.id==id).first()
+        if fa.is_collect == 0:
+            fa.is_collect =1
+
+        if fa.is_collect == 1:
+            fa.is_collect =0
+        dbsession.commit()
+        return fa
+
+Base.metadata.create_all(engine)

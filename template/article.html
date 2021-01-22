@@ -8,7 +8,14 @@
                     <h2>{{ article.titile}}</h2>
 
                     <div class="info">作者：{{ article.username }}&nbsp;&nbsp;&nbsp;分类：{{ articleType[article.type] }}&nbsp;&nbsp;&nbsp;
-                日期：{{ article.pubdate  }}&nbsp;&nbsp;&nbsp;阅读：{{ article.reading_volume }}次&nbsp;&nbsp;&nbsp;消耗积分：{{ article.cost_integral }} 分</div>
+                日期：{{ article.pubdate  }}&nbsp;&nbsp;&nbsp;阅读：{{ article.reading_volume }}次&nbsp;&nbsp;&nbsp;消耗积分：{{ article.cost_integral }} 分
+                        {% if not session.get("username") %}
+                        <span class="glyphicon glyphicon-heart-empty navbar-right" id="collect1"></span>
+                        {% endif %}
+                          {% if  session.get("username") %}
+                        <span class="glyphicon glyphicon glyphicon-heart navbar-right" id="collect2"></span>
+                            {% endif %}
+                    </div>
 
                     <p id="content">
 
@@ -51,7 +58,13 @@
                  $("#content").append(data.data);
             }
 
+        });
+
+        $.ajax({
+
         })
+
+
     });
 
     function doBuyArticle(){

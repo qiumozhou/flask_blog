@@ -38,7 +38,7 @@ def login_in():
             return jsonify(result)
         else:
             session['username'] = user.username
-            # session['userid'] = user.id
+            session['userid'] = user.id
             result = {'code': "10001", 'msg': "success", "data": user.username}
             resp = make_response(jsonify(result))  # 设置响应体
             resp.set_cookie("username", user.username, max_age=3600)
