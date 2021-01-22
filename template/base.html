@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="cont" id="side1">
+    <div class="cont">
         {% block header %}
 
         <nav class="navbar navbar-inverse">
@@ -31,28 +31,28 @@
                     </ul>
 
                     {% if not session.get("username") %}
-                    <ul class="nav navbar-nav navbar-right " id = "tag1">
+                    <ul class="nav navbar-nav navbar-right " id="tag1">
                         <li><a href="#" data-toggle="modal" data-target="#login" onclick="dogetcode()">login</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#register">register</a></li>
                     </ul>
-                    {% endif %}
-
-                     {% if session.get("username") %}
-                      <ul  class="nav navbar-nav navbar-right"  id = "tag2">
+                    {% endif %} {% if session.get("username") %}
+                    <ul class="nav navbar-nav navbar-right" id="tag2">
                         <li><a href="#" id="name">欢迎您！{{ session.get("username") }}</a></li>
-                        <li><a  onclick="doLogout()">logout</a></li>
+                        <li><a onclick="doLogout()">logout</a></li>
                     </ul>
                     {% endif %}
 
 
-                 <<div class="col-lg-2" >
-                <div class="input-group navbar-btn ">
-                  <input type="text" class="form-control" placeholder="Search for..." id="search">
-                  <span class="input-group-btn">
+                    <div class="col-lg-2">
+                        <div class="input-group navbar-btn ">
+                            <input type="text" class="form-control" placeholder="Search for..." id="search">
+                            <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="doSearch()">Go!</button>
                   </span>
-                </div><!-- /input-group -->
-              </div><!-- /.col-lg-6 -->
+                        </div>
+                        <!-- /input-group -->
+                    </div>
+                    <!-- /.col-lg-6 -->
 
 
 
@@ -74,37 +74,44 @@
                     </div>
                     <div class="modal-body">
 
-                         <div class="row">
+                        <div class="row">
                             <div class="col-lg-8 col-lg-offset-2" style="margin-bottom:10px">
-                              <div class="input-group">
-                                <span class="input-group-addon">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
                                   username
                                 </span>
-                                <input type="text" class="form-control" aria-label="..." id="lo_username">
-                              </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input type="text" class="form-control" aria-label="..." id="lo_username">
+                                </div>
+                                <!-- /input-group -->
+                            </div>
+                            <!-- /.col-lg-6 -->
 
                             <div class="col-lg-8 col-lg-offset-2" style="margin-bottom:10px">
-                              <div class="input-group">
-                                <span class="input-group-addon">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
                                 password
                                 </span>
-                                <input type="text" class="form-control" aria-label="..." id = "lo_password">
-                              </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input type="text" class="form-control" aria-label="..." id="lo_password">
+                                </div>
+                                <!-- /input-group -->
+                            </div>
+                            <!-- /.col-lg-6 -->
 
-                             <div class="col-lg-8 col-lg-offset-2" >
-                              <div class="input-group">
-                                <span class="input-group-addon">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
                                   code
                                 </span>
-                                <input  type="text" class="form-control" style="width: 30%" aria-label="..." id="lo_code">
-                                <div class="col-lg-offset-2">
-                                    <img src="" alt="" id="verifyCode" onclick="dogetcode()">
+                                    <input type="text" class="form-control" style="width: 30%" aria-label="..." id="lo_code">
+                                    <div class="col-lg-offset-2">
+                                        <img src="" alt="" id="verifyCode" onclick="dogetcode()">
+                                    </div>
                                 </div>
-                              </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                          </div><!-- /.row -->
+                                <!-- /input-group -->
+                            </div>
+                            <!-- /.col-lg-6 -->
+                        </div>
+                        <!-- /.row -->
 
 
                     </div>
@@ -129,45 +136,46 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-8 col-lg-offset-2" style="margin-bottom:10px">
-                              <div class="input-group">
-                                <span class="input-group-addon">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
                                   username
                                 </span>
-                                <input type="text" class="form-control" aria-label="..." id="re_username">
-                              </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input type="text" class="form-control" aria-label="..." id="re_username">
+                                </div>
+                                <!-- /input-group -->
+                            </div>
+                            <!-- /.col-lg-6 -->
 
                             <div class="col-lg-8 col-lg-offset-2" style="margin-bottom:10px">
-                              <div class="input-group">
-                                <span class="input-group-addon">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
                                 password
                                 </span>
-                                <input type="text" class="form-control" aria-label="..." id = "re_password">
-                              </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input type="text" class="form-control" aria-label="..." id="re_password">
+                                </div>
+                                <!-- /input-group -->
+                            </div>
+                            <!-- /.col-lg-6 -->
 
-                             <div class="col-lg-8 col-lg-offset-2" >
-                              <div class="input-group">
-                                <span class="input-group-addon">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
                                   code
                                 </span>
-                                <input  type="text" class="form-control" style="width: 30%" aria-label="..." id="re_code">
-                                <div class="col-lg-offset-2">
-                                    <button class="btn btn-default" type="submit" onclick="doSend()" id="sendCode">send code
+                                    <input type="text" class="form-control" style="width: 30%" aria-label="..." id="re_code">
+                                    <div class="col-lg-offset-2">
+                                        <button class="btn btn-default" type="submit" onclick="doSend()" id="sendCode">send code
                                     </button>
-                                    <ins id="info"></ins>
+                                        <ins id="info"></ins>
+                                    </div>
+
                                 </div>
+                                <!-- /input-group -->
 
-                              </div><!-- /input-group -->
-
-                            </div><!-- /.col-lg-6 -->
-
-
-
-
-                          </div><!-- /.row -->
-
-
+                            </div>
+                            <!-- /.col-lg-6 -->
+                        </div>
+                        <!-- /.row -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
@@ -176,63 +184,64 @@
                 </div>
                 <!-- /.modal-content -->
             </div>
-            
+
             <!-- /.modal -->
         </div>
 
 
 
 
-        {% endblock %}
-        {% block main %}
+        {% endblock %} {% block main %}
         <!-- 热点  -->
-        <div class="row">
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Top 10 reading</div>
-                    <div  class="panel-body">
+        <div id="side1">
+            <!-- <div class="row"> -->
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Top 10 reading</div>
+                    <div class="panel-body">
                         <ul class="list-group">
-                            <li class="list-group-item list-group-item-info"  v-for="(article,index) in  data1 ">
+                            <li class="list-group-item list-group-item-info" v-for="(article,index) in  data1 ">
                                 <a :href="'/article/'+article[0]"> ${index+1}.${article[1].substr(0,25)+"..." }</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </div>
 
-
-       
-
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Top 10 new publications</div>
-                    <div class="panel-body" >
+                <div class="panel panel-default">
+                    <div class="panel-heading">Top 10 new publications</div>
+                    <div class="panel-body">
                         <ul class="list-group">
-                            <li class="list-group-item list-group-item-info"  v-for="(article,index) in  data2 ">
+                            <li class="list-group-item list-group-item-info" v-for="(article,index) in  data2 ">
                                 <a :href="'/article/'+article[0]"> ${index+1}.${article[1].substr(0,25)+"..." }</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </div>
 
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Top 10 Popular recommendation</div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Top 10 Popular recommendation</div>
                     <div class="panel-body" id="side3">
                         <ul class="list-group">
-                            <li class="list-group-item list-group-item-info"  v-for="(article,index) in  data3 ">
+                            <li class="list-group-item list-group-item-info" v-for="(article,index) in  data3 ">
                                 <a :href="'/article/'+article[0]"> ${index+1}.${article[1].substr(0,25)+"..." }</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-       </div>
-        {% endblock %} 
 
 
-        {% block footer %}
+
+
+
+
+
+        </div>
+        <!-- </div> -->
+
+        {% endblock %} {% block footer %}
 
         <footer>
             <div class="text-center">
@@ -251,9 +260,9 @@
                 var app1 = new Vue({
                     el: "#side1",
                     data: {
-                        data1:  data[0],
-                        data2:  data[1],
-                        data3:  data[2],
+                        data1: data[0],
+                        data2: data[1],
+                        data3: data[2],
                     },
                     delimiters: ["${", "}"]
                 })
@@ -268,134 +277,133 @@
             location.href = url
         };
 
-        function doSend(){
+        function doSend() {
             var username = $("#re_username").val()
             $.ajax({
-            //几个参数需要注意一下
-                type: "POST",//方法类型
-                contentType:"application/x-www-form-urlencoded",
-                url: "/code" ,//url
+                //几个参数需要注意一下
+                type: "POST", //方法类型
+                contentType: "application/x-www-form-urlencoded",
+                url: "/code", //url
                 data: {
-                    "userName":username
+                    "userName": username
                 },
-                success: function (result) {
-                    console.log(result);//打印服务端返回的数据(调试用)
+                success: function(result) {
+                    console.log(result); //打印服务端返回的数据(调试用)
                     if (result == "ok") {
                         alert("SUCCESS");
-                    }else if(result == "error"){
+                    } else if (result == "error") {
                         alert("email's address is error!");
-                    }
-                    ;
+                    };
                 },
-                error : function() {
+                error: function() {
                     alert("异常！");
                 }
             });
             timeInterval();
         };
 
-        function doRegister(){
+        function doRegister() {
 
             var username = $("#re_username").val()
             var password = $("#re_password").val()
             var code = $("#re_code").val()
-            if (!username || !password || !code){
+            if (!username || !password || !code) {
                 alert("please write all message")
                 return
             }
             $.ajax({
-                type:"POST",
-                contentType:"application/x-www-form-urlencoded",
-                url:"/register",
-                data:{
-                    userName:username,
-                    passWord:password,
-                    code:code
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "/register",
+                data: {
+                    userName: username,
+                    passWord: password,
+                    code: code
                 },
-                success: function (result){
-                    if(result.code == '10001'){
+                success: function(result) {
+                    if (result.code == '10001') {
                         alert(result.msg)
                     }
                 },
-                error:function (){
-                        alert("error")
+                error: function() {
+                    alert("error")
                 }
             })
         };
 
-        function dogetcode(){
+        function dogetcode() {
             $.ajax({
-                type:"GET",
-                url:"/verifycode",
-                success:function (result){
-                     $("#verifyCode").attr("src","data:image/jpg;base64,"+result)
+                type: "GET",
+                url: "/verifycode",
+                success: function(result) {
+                    $("#verifyCode").attr("src", "data:image/jpg;base64," + result)
                 }
             })
         };
 
-        function  doLogin(){
+        function doLogin() {
             var username = $("#lo_username").val()
             var password = $("#lo_password").val()
             var code = $("#lo_code").val()
-            if (!username || !password || !code){
+            if (!username || !password || !code) {
                 alert("please write all message")
                 return
             }
             $.ajax({
-                type:"POST",
-                 contentType:"application/x-www-form-urlencoded",
-                url:"/login",
-                data:{
-                    userName:username,
-                    passWord:password,
-                    code:code
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "/login",
+                data: {
+                    userName: username,
+                    passWord: password,
+                    code: code
                 },
-                success: function (result){
-                    if(result.code == '10001'){
-                    $('#login').modal('hide');
-                    location.href = "/";
-                    }else if(result.code == '10004'){
+                success: function(result) {
+                    if (result.code == '10001') {
+                        $('#login').modal('hide');
+                        location.href = "/";
+                    } else if (result.code == '10004') {
                         alert(result.msg);
                     }
                 },
-                error:function (){
-                        alert("error")
+                error: function() {
+                    alert("error")
                 }
             })
         };
 
-        function doLogout(){
-                $.ajax({
-                type:"GET",
-                url:"/logout",
-                success:function (result){
-                    if (result=="ok"){
-                        location.href='/'
+        function doLogout() {
+            $.ajax({
+                type: "GET",
+                url: "/logout",
+                success: function(result) {
+                    if (result == "ok") {
+                        location.href = '/'
                     }
                 }
-                })
+            })
         };
 
 
 
-        function timeInterval(){
-              $("#sendCode").addClass("disabled");
-              $("#info").html("click after 60s");
-              var timeSec = 59;
-              var timeStr = '';
-              var codeTime = setInterval(function Internal(){
-                if (timeSec == 0){
-                  $("#sendCode").removeClass("disabled");
-                  $("#info").html("");
-                  clearInterval(codeTime);
-                  return;
+        function timeInterval() {
+            $("#sendCode").addClass("disabled");
+            $("#info").html("click after 60s");
+            var timeSec = 59;
+            var timeStr = '';
+            var codeTime = setInterval(function Internal() {
+                if (timeSec == 0) {
+                    $("#sendCode").removeClass("disabled");
+                    $("#info").html("");
+                    clearInterval(codeTime);
+                    return;
                 }
-                timeStr = "click after"+timeSec+"s";
+                timeStr = "click after" + timeSec + "s";
                 $("#info").html(timeStr);
                 timeSec--;
-              },1000);
+            }, 1000);
 
-            }
+        }
     </script>
 
 </body>
