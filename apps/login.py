@@ -42,7 +42,7 @@ def login_in():
             result = {'code': "10001", 'msg': "success", "data": user.username}
             resp = make_response(jsonify(result))  # 设置响应体
             resp.set_cookie("username", user.username, max_age=3600)
-            # resp.set_cookie("userid", user.id, max_age=3600)
+            resp.set_cookie("userid", str(user.id), max_age=3600)
             return resp
 
 
@@ -53,4 +53,5 @@ def logout():
     resp.delete_cookie("username")
     resp.delete_cookie("userid")
     session.pop("username")
+    session.pop("userid")
     return resp

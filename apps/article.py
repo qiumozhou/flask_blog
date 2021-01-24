@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, jsonify, session
 
-from apps.model import Article
-
+from apps.model import Article, Favorite, Comment
 
 article = Blueprint("article",__name__)
 
@@ -10,7 +9,9 @@ article = Blueprint("article",__name__)
 def getArticle(id):
     article = Article()
     articleData = article.getOneArticle(id)
-    return render_template("article.html",article=articleData)
+    comList = Comment().getCommentsList(id,1,10)
+    articleStatu = Favorite().getStatu(session.get("userid"),id)
+    return render_template("article.html",article=articleData,statu = articleStatu,comments=comList)
 
 
 @article.route("/content/<id>",methods=["GET"])

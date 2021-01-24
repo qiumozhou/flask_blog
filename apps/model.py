@@ -8,6 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from apps.db import engine, dbsession
+from common.serializer import objToDict, listToTree
 
 Base = declarative_base()
 
@@ -107,6 +108,7 @@ class Article(Base):
 
     def isBuy(self,articleId):
         data = dbsession.query(Credit.id).filter(Credit.target==articleId,Credit.category=='购买文章').first()
+
         if data:
             return True
         else:
@@ -119,6 +121,7 @@ class Article(Base):
 
     def getAllContent(self, articleId):
         row = dbsession.query(Article.content).filter(Article.id == articleId).first()
+
         return row[0]
 
     def buyArticle(self,username,articleid):
@@ -183,10 +186,34 @@ class Comment(Base):
     createtime = Column(DateTime)
     updatetime = Column(DateTime)
 
-    # def getComment(self,articleid):
-    #     pass
+    def addComment(self,uesrid,articleid,replyid,content):
+        if replyid:
+            now = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+            com = Comment(user_id=uesrid,article_id=articleid,reply_id=replyid,content=content,is_hidden=0,
+                          createtime=now,updatetime=now)
+            dbsession.add(com)
+            dbsession.commit()
 
+        if not replyid:
+            now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            com = Comment(user_id=uesrid, article_id=articleid,content=content, is_hidden=0,
+                          createtime=now, updatetime=now)
+            dbsession.add(com)
+            dbsession.commit()
 
+    def getCommentsList(self,articleid,page_index,page_size):
+        row = dbsession.query(Comment).filter(Comment.article_id==articleid,Comment.reply_id==0).order_by(Comment.createtime.desc()).limit(page_size).offset((page_index-1)*page_size)
+        #不带子评论的评论列表
+        data = objToDict(row)
+        for item in data:
+            row = dbsession.query(Comment).filter(Comment.reply_id==item['id']).order_by(Comment.createtime.desc()).all()
+            son_data = objToDict(row)
+            item['reply_list'] = son_data
+        return data
+
+        # print(row[0])
+
+        return data
 
 class Favorite(Base):
     __tablename__ = "tb_favorite"
@@ -201,23 +228,39 @@ class Favorite(Base):
         fa = dbsession.query(Favorite).filter(Favorite.article_id==articleid,Favorite.user_id==userid).first()
         return fa
 
-    #新建一个收藏
-    def addCollect(self,userid,articleid):
-        now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        fa = Favorite(user_id=userid,article_id=articleid,is_collect=1,create=now)
-        dbsession.add(fa)
-        dbsession.commit()
-        return fa
+    # #新建一个收藏
+    # def addCollect(self,userid,articleid):
+    #     now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    #     fa = Favorite(user_id=userid,article_id=articleid,is_collect=1,create=now)
+    #     dbsession.add(fa)
+    #     dbsession.commit()
+    #     return fa
 
     #修改收藏状态
-    def resetCollect(self,id):
-        fa = dbsession.query(Favorite).filter(Favorite.id==id).first()
+    def resetCollect(self,userid,articleid):
+        fa = dbsession.query(Favorite).filter(Favorite.user_id==userid,Favorite.article_id==articleid).first()
+        if not fa:
+            now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            fa = Favorite(user_id=userid, article_id=articleid, is_collect=1, create=now)
+            dbsession.add(fa)
+            dbsession.commit()
+            return fa.is_collect
+
         if fa.is_collect == 0:
             fa.is_collect =1
+            dbsession.commit()
+            return fa.is_collect
 
         if fa.is_collect == 1:
             fa.is_collect =0
-        dbsession.commit()
-        return fa
+            dbsession.commit()
+            return fa.is_collect
 
-Base.metadata.create_all(engine)
+    def getStatu(self,userid,articleid):
+        fa = dbsession.query(Favorite).filter(Favorite.user_id==userid,Favorite.article_id==articleid).first()
+        if fa:
+            return fa.is_collect
+        else:
+            return 0
+
+# Base.metadata.create_all(engine)

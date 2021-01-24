@@ -4,6 +4,8 @@ import os
 from flask import Flask, render_template, request, session
 
 from apps.article import article
+from apps.comment import comment
+from apps.favorite import favorite
 from apps.login import login
 from apps.filters import filters
 from apps.model import Article
@@ -35,10 +37,10 @@ def getType():
 @app.before_request
 def before_request():
     username = request.cookies.get("username")
-    # userid = request.cookies.get("userid")
+    userid = request.cookies.get("userid")
     if username:
         session['username'] = username
-        # session['userid'] = userid
+        session['userid'] = userid
 
 
 @app.route('/')
@@ -60,4 +62,6 @@ if __name__ == "__main__":
     app.register_blueprint(side)
     app.register_blueprint(register)
     app.register_blueprint(login)
+    app.register_blueprint(favorite)
+    app.register_blueprint(comment)
     app.run(debug=True)

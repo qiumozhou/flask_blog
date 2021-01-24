@@ -4,9 +4,9 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="jumbotron">
-                    <h2>{{ article.titile}} {% if not session.get("username") %}
-                        <span class="glyphicon glyphicon-heart-empty navbar-right" id="collect1"></span> {% endif %} {% if session.get("username") %}
-                        <span class="glyphicon glyphicon glyphicon-heart navbar-right" id="collect2"></span> {% endif %}</h2>
+                    <h2>{{ article.titile}} {% if not session.get("username") or statu == 0 %}
+                        <span class="glyphicon glyphicon-heart-empty navbar-right" id="collect1" onclick="doFavorite()" style=" cursor:pointer;"></span> {% endif %} {% if statu == 1 %}
+                        <span class="glyphicon glyphicon glyphicon-heart navbar-right" id="collect2" onclick="doFavorite()" style=" cursor:pointer;"></span> {% endif %}</h2>
 
                     <div class="info">作者：{{ article.username }}&nbsp;&nbsp;&nbsp;分类：{{ articleType[article.type] }}&nbsp;&nbsp;&nbsp; 日期：{{ article.pubdate }}&nbsp;&nbsp;&nbsp;阅读：{{ article.reading_volume }}次&nbsp;&nbsp;&nbsp;消耗积分：{{ article.cost_integral }} 分
 
@@ -26,12 +26,78 @@
                     </div>
                     <div class="panel-footer">Your comment
 
-                        <input type="text" class="form-control" aria-label="...">
+                        <input type="text" class="form-control" aria-label="..." id="comment">
                         <div class="input-group-btn">
-                            <button type="button" class="btn btn-primary navbar-btn pull-right">submit</button>
+                            <button type="button" class="btn btn-primary navbar-btn pull-right" onclick="doAddComment()" id="huifu" style="display:none;">reply</button>
+                            <button type="button" class="btn btn-primary navbar-btn pull-right" onclick="doAddComment()" id="pinglun">submit</button>
+                            <button type="button" class="btn btn-primary navbar-btn pull-right" onclick="doCancle()" style="display:none;" id="yincang">cancle</button>
                         </div>
                     </div>
+                    <div class="panel panel-primary" style="background-color: #d4e0e2">
+                        {% for com in comments %}
+                        <div class="row">
+
+
+                            <div class="col-md-2">
+                                <div class="thumbnail">
+                                    <img src="/images/logo.jpg" alt=""></div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="info">作者：{{ com.user.username }}&nbsp;&nbsp;&nbsp; 日期：{{ com.createtime }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="margin-top:5px">
+                                        <div class="row">
+                                            <div class="col-md-4"><span style=" cursor:pointer;" onclick="doReply('{{ com.user.username }}','{{ com.id }}')">回复</span></div>
+                                            <div class="col-md-4"><span style=" cursor:pointer;">赞成</span></div>
+                                            <div class="col-md-4"><span style=" cursor:pointer;">反对</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>{{ com.content }}</p>
+                            </div>
+
+                        </div>
+                        {% for re in com.reply_list %}
+                        <div class="row">
+                            <div class="col-md-11 col-md-offset-1">
+
+                                <div class="col-md-2">
+                                    <div class="thumbnail">
+                                        <img src="/images/logo.jpg" alt=""></div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="info">{{ re.user.username }}回复作者：{{ com.user.username }}&nbsp;&nbsp;&nbsp; 日期：{{ re.createtime }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" style="margin-top:5px">
+                                            <div class="row">
+                                                 <div class="col-md-4"><span style=" cursor:pointer;"></span></div>
+                                                <div class="col-md-4"><span style=" cursor:pointer;">赞成</span></div>
+                                                <div class="col-md-4"><span style=" cursor:pointer;">反对</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p>{{ re.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %} {% endfor %}
+                    </div>
+
+
+
+
+
                 </div>
+
+
             </div>
             {{ super() }}
         </div>
@@ -44,6 +110,7 @@
     url = location.href;
     index = url.lastIndexOf('/') + 1;
     articleId = url.substring(index);
+    replyId = ""
     $(function() {
         $.get("/content/" + articleId, function(data) {
             if (data.flag == true) {
@@ -70,6 +137,87 @@
                 })
             }
         })
+    };
+
+    function doFavorite() {
+        $.ajax({
+            type: "POST", //方法类型
+            url: "/favorite/" + articleId,
+            success: function(data) {
+                if (data.code == 10004) {
+                    alert("please login!")
+                };
+
+                if (data.data == 1) {
+                    $("#collect1").hide();
+                    $("#collect1").after('<span class="glyphicon glyphicon glyphicon-heart navbar-right" id="collect2" onclick="doFavorite()" style=" cursor:pointer;"></span>')
+                    $("#collect1").remove();
+                };
+
+                if (data.data == 0) {
+                    $("#collect2").hide();
+
+                    $("#collect2").after('<span class="glyphicon glyphicon-heart-empty navbar-right" id="collect1" onclick="doFavorite()" style=" cursor:pointer;"></span>')
+                    $("#collect2").remove();
+                };
+            }
+        })
+    };
+
+    function doAddComment() {
+        let content = $("#comment").val();
+        if (replyId) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "/comment",
+                data: {
+                    "articleId": articleId,
+                    "content": content,
+                    "replyId": replyId
+                },
+                success: function(data) {
+                    if (data.code == 10001) {
+                        location.reload();
+                    }
+                }
+            })
+        };
+        if (!replyId) {
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "/comment",
+                data: {
+                    "articleId": articleId,
+                    "content": content,
+
+                },
+                success: function(data) {
+                    if (data.code == 10001) {
+                        location.reload();
+                    }
+                }
+            })
+        }
+
+    };
+
+    function doReply(username, id) {
+        $("#comment").attr("placeholder", "回复" + username);
+        $("#yincang").show();
+        $("#huifu").show();
+        $("#pinglun").hide();
+        replyId = id;
+    };
+
+    function doCancle() {
+        $("#yincang").hide();
+        $("#huifu").hide();
+        $("#pinglun").show();
+        $("#comment").attr("placeholder", "");
+        replyId = ""
     }
 </script>
 {% endblock %}

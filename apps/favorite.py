@@ -9,17 +9,15 @@ from common.mail import Mail
 favorite = Blueprint("favorite",__name__)
 
 
-@favorite.route("/favorite/<int:id>",methods=["GET","PUT","POST"])
+@favorite.route("/favorite/<int:id>",methods=["GET","POST"])
 def setFavorite(id):
-    if request.method=="PUT":
-        fa = Favorite().resetCollect(id)
-        result = {"code": 10001, "data": fa, "msg": "ok"}
-        return jsonify(result)
-
     if request.method == "POST":
-        userid = request.form.get("userId")
-        articleid = request.form.get("articleId")
-        fa = Favorite.addCollect(userid, articleid)
+        userid = session.get("userid")
+        if not userid:
+            result = {"code": 10004, "msg": "ok"}
+            return jsonify(result)
+        articleid = id
+        fa = Favorite().resetCollect(userid,articleid)
         result = {"code": 10001, "data": fa, "msg": "ok"}
         return jsonify(result)
 
