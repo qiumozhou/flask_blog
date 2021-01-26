@@ -34,3 +34,8 @@ def buyArticle(id):
         article = Article()
         result = article.buyArticle(session.get("username"),id)
         return jsonify(result)
+
+
+@article.route("/article",methods=["GET"])
+def addArticle():
+    return render_template("add.html")
